@@ -87,6 +87,10 @@ async function run() {
 
         //CLASSES COLLECTION    
 
+        app.get('/classes', async (req, res) => { // without check
+            const result = await classesCollection.find().toArray()
+            res.send(result)
+        })
 
         app.post('/classes', async (req, res) => {
             const newClass = req.body;
