@@ -38,10 +38,16 @@ async function run() {
         app.get("/users", async (req, res) => {
 
             const email = req.query?.email
+            const instructors = req.query?.instructors
 
             if (email) {
                 const queryWithEmail = { email }
                 const result = await usersCollection.findOne(queryWithEmail)
+                res.send(result)
+            }
+            else if (instructors) {
+                const queryWithInstructor = { role: "instructor" }
+                const result = await usersCollection.find(queryWithInstructor).toArray()
                 res.send(result)
             }
             else {
