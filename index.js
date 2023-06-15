@@ -99,6 +99,21 @@ async function run() {
             res.send(result)
         })
 
+        app.put('/classes/:id', async (req, res) => {
+            const status = req.body.status
+            const query = { _id: new ObjectId(req.params.id) };
+            const options = { upsert: true };
+
+            const updateDoc = {
+                $set: {
+                    status
+                },
+            };
+
+            const result = await classesCollection.updateOne(query, updateDoc, options)
+            res.send(result)
+        })
+
 
     } finally {
         // Ensures that the client will close when you finish/error
