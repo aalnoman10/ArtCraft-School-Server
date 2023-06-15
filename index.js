@@ -36,8 +36,18 @@ async function run() {
 
         //USERS COLLECTION
         app.get("/users", async (req, res) => {
-            const result = await usersCollection.find().toArray();
-            res.send(result)
+
+            const email = req.query?.email
+
+            if (email) {
+                const queryWithEmail = { email }
+                const result = await usersCollection.findOne(queryWithEmail)
+                res.send(result)
+            }
+            else {
+                const result = await usersCollection.find().toArray();
+                res.send(result)
+            }
         })
 
         app.post("/users", async (req, res) => {
@@ -55,12 +65,12 @@ async function run() {
         })
 
         app.patch("/users/:id", async (req, res) => {
-            const status = req.body.status;
+            const role = req.body.role;
             const filter = { _id: new ObjectId(req.params.id) };
 
             const doc = {
                 $set: {
-                    status
+                    role
                 }
             };
 
