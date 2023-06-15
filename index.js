@@ -31,8 +31,8 @@ async function run() {
 
         // COLLECTION
         const usersCollection = client.db("artCraftDB").collection("users")
-        const instructorsCollection = client.db("artCraftDB").collection("instructors")
         const classesCollection = client.db("artCraftDB").collection("classes")
+        const paymentCollection = client.db("artCraftDB").collection("payment")
 
         //USERS COLLECTION
         app.get("/users", async (req, res) => {
@@ -81,6 +81,17 @@ async function run() {
             };
 
             const result = await usersCollection.updateOne(filter, doc)
+            res.send(result)
+        })
+
+
+        //CLASSES COLLECTION    
+
+
+        app.post('/classes', async (req, res) => {
+            const newClass = req.body;
+
+            const result = await classesCollection.insertOne(newClass)
             res.send(result)
         })
 
