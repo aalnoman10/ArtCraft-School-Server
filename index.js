@@ -87,9 +87,18 @@ async function run() {
 
         //CLASSES COLLECTION    
 
-        app.get('/classes', async (req, res) => { // without check
-            const result = await classesCollection.find().toArray()
-            res.send(result)
+        app.get('/classes', async (req, res) => {
+            const instructorEmail = req.query.instructorEmail
+
+            if (instructorEmail) {
+                const filter = { instructorEmail }
+                const result = await classesCollection.find(filter).toArray()
+                res.send(result)
+            }
+            else {
+                const result = await classesCollection.find().toArray()
+                res.send(result)
+            }
         })
 
         app.post('/classes', async (req, res) => {
