@@ -32,6 +32,7 @@ async function run() {
         // COLLECTION
         const usersCollection = client.db("artCraftDB").collection("users")
         const classesCollection = client.db("artCraftDB").collection("classes")
+        const selectedCollection = client.db("artCraftDB").collection("selected")
         const paymentCollection = client.db("artCraftDB").collection("payment")
 
         //USERS COLLECTION
@@ -86,7 +87,6 @@ async function run() {
 
 
         //CLASSES COLLECTION    
-
         app.get('/classes', async (req, res) => {
             const instructorEmail = req.query.instructorEmail
 
@@ -96,7 +96,8 @@ async function run() {
                 res.send(result)
             }
             else {
-                const result = await classesCollection.find().toArray()
+                const filter = { status: "approve" }
+                const result = await classesCollection.find(filter).toArray()
                 res.send(result)
             }
         })
@@ -149,6 +150,22 @@ async function run() {
             res.send(result)
         })
 
+
+        //SELECTED COLLECTION    
+
+        app.get('/selected', async (req, res) => { //wo c
+            const selected = req.query.email;
+
+            const result = await selectedCollection.find(selected).toArray()
+            res.send(result)
+        })
+
+        app.post('/selected', async (req, res) => {
+            const selected = req.body;
+
+            const result = await selectedCollection.insertOne(selected)
+            res.send(result)
+        })
 
     } finally {
         // Ensures that the client will close when you finish/error
