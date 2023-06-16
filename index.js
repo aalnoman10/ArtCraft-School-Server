@@ -162,8 +162,14 @@ async function run() {
 
         app.post('/selected', async (req, res) => {
             const selected = req.body;
-
             const result = await selectedCollection.insertOne(selected)
+            res.send(result)
+        })
+
+        app.delete('/selected/:id', async (req, res) => { //wo c
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+            const result = await selectedCollection.deleteOne(filter)
             res.send(result)
         })
 
