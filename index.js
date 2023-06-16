@@ -108,6 +108,26 @@ async function run() {
             res.send(result)
         })
 
+        app.patch('/classes/:id', async (req, res) => {
+            const id = req.params.id
+            const body = req.body
+            const filter = { _id: new ObjectId(id) };
+
+            const options = { upsert: true };
+
+            const updateDoc = {
+                $set: {
+                    className: body.className,
+                    classImage: body.classImage,
+                    classImage: body.classImage,
+                    price: body.price
+                },
+            };
+
+            const result = await classesCollection.updateOne(filter, updateDoc, options)
+            res.send(result)
+        })
+
         app.post('/classes', async (req, res) => {
             const newClass = req.body;
 
