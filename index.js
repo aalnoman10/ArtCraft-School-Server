@@ -101,6 +101,13 @@ async function run() {
             }
         })
 
+        app.get('/classes/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) };
+            const result = await classesCollection.findOne(query)
+            res.send(result)
+        })
+
         app.post('/classes', async (req, res) => {
             const newClass = req.body;
 
