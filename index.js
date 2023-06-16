@@ -108,17 +108,22 @@ async function run() {
             res.send(result)
         })
 
+        app.post('/classes', async (req, res) => {
+            const newClass = req.body;
+
+            const result = await classesCollection.insertOne(newClass)
+            res.send(result)
+        })
+
         app.patch('/classes/:id', async (req, res) => {
             const id = req.params.id
             const body = req.body
             const filter = { _id: new ObjectId(id) };
-
             const options = { upsert: true };
 
             const updateDoc = {
                 $set: {
                     className: body.className,
-                    classImage: body.classImage,
                     classImage: body.classImage,
                     price: body.price
                 },
@@ -128,21 +133,15 @@ async function run() {
             res.send(result)
         })
 
-        app.post('/classes', async (req, res) => {
-            const newClass = req.body;
-
-            const result = await classesCollection.insertOne(newClass)
-            res.send(result)
-        })
-
         app.put('/classes/:id', async (req, res) => {
-            const status = req.body.status
+            const body = req.body
             const query = { _id: new ObjectId(req.params.id) };
             const options = { upsert: true };
 
             const updateDoc = {
                 $set: {
-                    status
+                    status: body.status,
+                    feedback: body.feedback
                 },
             };
 
