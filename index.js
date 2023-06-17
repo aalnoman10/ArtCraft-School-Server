@@ -155,8 +155,13 @@ async function run() {
 
         app.get('/selected', async (req, res) => { //wo c
             const email = req.query?.email;
+            const enroll = req.query?.enroll;
 
-            if (email) {
+            if (email && enroll) {
+                const filter = { email, enroll: "enrolled" }
+                const result = await selectedCollection.find(filter).toArray()
+                res.send(result)
+            } else if (email) {
                 const filter = { email }
                 const result = await selectedCollection.find(filter).toArray()
                 res.send(result)
