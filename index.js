@@ -89,10 +89,15 @@ async function run() {
         //CLASSES COLLECTION    
         app.get('/classes', async (req, res) => {
             const instructorEmail = req.query.instructorEmail
+            const admin = req.query.role
 
             if (instructorEmail) {
                 const filter = { instructorEmail }
                 const result = await classesCollection.find(filter).toArray()
+                res.send(result)
+            }
+            else if (admin) {
+                const result = await classesCollection.find().toArray()
                 res.send(result)
             }
             else {
