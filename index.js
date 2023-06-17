@@ -24,10 +24,10 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // await client.db("admin").command({ ping: 1 });
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
         // COLLECTION
         const usersCollection = client.db("artCraftDB").collection("users")
@@ -154,15 +154,34 @@ async function run() {
         //SELECTED COLLECTION    
 
         app.get('/selected', async (req, res) => { //wo c
-            const selected = req.query.email;
+            const email = req.query?.email;
 
-            const result = await selectedCollection.find(selected).toArray()
-            res.send(result)
+            if (email) {
+                const filter = { email }
+                const result = await selectedCollection.find(filter).toArray()
+                res.send(result)
+            } else {
+                res.send({ massage: "error" })
+            }
         })
 
         app.post('/selected', async (req, res) => {
             const selected = req.body;
             const result = await selectedCollection.insertOne(selected)
+            res.send(result)
+        })
+
+        app.patch('/selected/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+
+            const updateDoc = {
+                $set: {
+                    enroll: "enrolled"
+                },
+            };
+
+            const result = await selectedCollection.updateOne(filter, updateDoc)
             res.send(result)
         })
 
